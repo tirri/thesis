@@ -6,16 +6,17 @@ b. without anything but words.
 '''
 
 import os
-import json, pprint
+import json
 import re
 import glob
 import validators
 
 
 def main():
-    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/temp/'
+    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/S24files_original/' # /S24files_original/ or /test_json_files/ or /test_json_files/temp/
 
     for file in glob.glob('{}*.json'.format(path)):
+        print(file)
         file_of_json = json.load(open(file))
 
         # Go through the messages within the data. The first message in the conversation
@@ -31,29 +32,31 @@ def main():
                             'comments': []}
 
             # Get the text after the 'body'-tag:
-            entry_message = cleanhtml(json_data['body'])
-
-            # If retirement-related word is in the message, store it to list in dictionary:
-            if is_retirement_in(entry_message):
-                message_chain['entry_message'].append(entry_message)
-
-            # Then get the comments in the message chain and do the same:
-            comments = json_data['comments']
-
-            for c in comments:
-
-                # Get the text after the 'body'-tag:
-                comment_txt = cleanhtml(c['body'])
-
-                if comment_txt in 'This message has been removed by admin.':
-                    continue
+            if 'body' in json_data.keys():
+                entry_message = cleanhtml(json_data['body'])
 
                 # If retirement-related word is in the message, store it to list in dictionary:
-                if is_retirement_in(comment_txt):
-                    message_chain['comments'].append(comment_txt)
+                if is_retirement_in(entry_message):
+                    message_chain['entry_message'].append(entry_message)
+
+                # Then get the comments in the message chain and do the same:
+                if 'comments' in json_data.keys():
+                    comments = json_data['comments']
+
+                    for c in comments:
+
+                        # Get the text after the 'body'-tag:
+                        if 'body' in c.keys():
+                            comment_txt = cleanhtml(c['body'])
+
+                            if comment_txt in 'This message has been removed by admin.':
+                                continue
+
+                            # If retirement-related word is in the message, store it to list in dictionary:
+                            if is_retirement_in(comment_txt):
+                                message_chain['comments'].append(comment_txt)
 
             if message_chain['comments'] or message_chain['entry_message']:
-
                 messages_dict['data'].append(message_chain)
 
         # In case something breaks, this should save the work done this far with the file:
@@ -63,7 +66,7 @@ def main():
     # Store all the original message chains with a retirement-related word in separate files into a directory.
     # The messages in a chain are separated by 'end'.
     messages_as_list = dict_to_list(messages_dict)
-    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/test_originals', ' end ')
+    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/original_retirement_messages', ' end ')
 
     # Clean the message chains. Leave only words without capitals, punctuation or numbers.
     # The messages in the chain will no longer be separated.
@@ -71,7 +74,7 @@ def main():
     no_doubles_list = rm_double_messages(messages_dict)
     no_urls_list = url_in_message(no_doubles_list)
     nothing_but_words_list = remove_punctuation(no_urls_list)
-    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/test_bows', ' ')
+    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/bow_retirement_messages', ' ')
     
 def is_retirement_in(message):
     retirement_related_words = 'eläke eläkke syytink syyting eläköi'.split()
