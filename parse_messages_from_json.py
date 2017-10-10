@@ -12,7 +12,7 @@ import glob
 
 
 def main():
-    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/'
+    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/temp/'
 
     for file in glob.glob('{}*.json'.format(path)):
         file_of_json = json.load(open(file))
@@ -78,6 +78,21 @@ def is_retirement_in(message):
             return True
     return False
 
+def quote_in_message(comment, message_chain):
+
+    # Duplicate of the list messages in order to avoid eternal loop:
+    previous_comments = message_chain[:]
+
+    # 2. If part of the comment is already in any message in the list of messages,
+    # store only the part of the comment that is not there yet:
+    for previous_comment in previous_comments:
+        previous_comment = previous_comment.lower()
+        if previous_comment in comment:
+            comment_without_previous = comment.replace(previous_comment, "")
+            return comment_without_previous
+    return False
+
+
 # Remove all the messages that are more than once in the message chain
 # and return a the chains as a list:
 def rm_double_messages(dict):
@@ -93,7 +108,7 @@ def rm_double_messages(dict):
             chain_list = []
 
             # Whatever the entry message is, if it exists, put it in the list as string:
-            if message_chain['entry_message']: ## CHANGE!
+            if message_chain['entry_message']:
                 entry_message = message_chain['entry_message'][0]
                 entry_message = entry_message.lower()
                 chain_list.append(entry_message)
@@ -106,21 +121,13 @@ def rm_double_messages(dict):
                 if comment in chain_list:
                     continue
 
-                # Duplicate of the list messages in order to avoid eternal loop:
-                previous_comments = chain_list[:]
+                # 3. Otherwise, add the comment to the list:
+                elif quote_in_message(comment, chain_list):
+                    comment = quote_in_message(comment,chain_list)
+                    chain_list.append(comment)
 
-                # 2. If part of the comment is already in any message in the list of messages,
-                # store only the part of the comment that is not there yet:
-                for previous_comment in previous_comments:
-                    previous_comment = previous_comment.lower()
-                    if previous_comment in comment:
-                        comment_without_previous = comment.replace(previous_comment, "")
-                        chain_list.append(comment_without_previous)
-                        continue
-
-                    # 3. Otherwise, add the comment to the list:
-                    elif comment not in chain_list:
-                        chain_list.append(comment)
+                else:
+                    chain_list.append(comment)
 
             no_double_messages.append(chain_list)
 
