@@ -9,6 +9,7 @@ import os
 import json, pprint
 import re
 import glob
+import validators
 
 
 def main():
@@ -68,7 +69,8 @@ def main():
     # The messages in the chain will no longer be separated.
     # Also, no message will appear twice in the data.
     no_doubles_list = rm_double_messages(messages_dict)
-    nothing_but_words_list = remove_punctuation(no_doubles_list)
+    no_urls_list = url_in_message(no_doubles_list)
+    nothing_but_words_list = remove_punctuation(no_urls_list)
     store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/test_bows', ' ')
     
 def is_retirement_in(message):
@@ -92,6 +94,19 @@ def quote_in_message(comment, message_chain):
             return comment_without_previous
     return False
 
+def url_in_message(list):
+    j = 0
+    for message_chain in list:
+        i = 0
+        for message in message_chain:
+            for word in message.split():
+                if validators.url(word):
+                    message_without_url = message.replace(word, "")
+                    message_chain[i] = message_without_url
+                    list[j] = message_chain
+            i = i + 1
+        j = j + 1
+    return list
 
 # Remove all the messages that are more than once in the message chain
 # and return a the chains as a list:
