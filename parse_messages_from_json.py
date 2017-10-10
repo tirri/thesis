@@ -13,7 +13,13 @@ import validators
 
 
 def main():
-    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/S24files_original/' # /S24files_original/ or /test_json_files/ or /test_json_files/temp/
+    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/' # /S24files_original/ or /test_json_files/ or /test_json_files/temp/
+
+    messages_dict = {'data':
+        [
+
+        ]
+    }
 
     for file in glob.glob('{}*.json'.format(path)):
         print(file)
@@ -21,11 +27,6 @@ def main():
 
         # Go through the messages within the data. The first message in the conversation
         # has a special tagging, that is why they are separated here first too.
-        messages_dict = { 'data':
-                [
-
-                ]
-            }
 
         for json_data in file_of_json:
             message_chain = {'entry_message': [],
@@ -66,7 +67,7 @@ def main():
     # Store all the original message chains with a retirement-related word in separate files into a directory.
     # The messages in a chain are separated by 'end'.
     messages_as_list = dict_to_list(messages_dict)
-    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/original_retirement_messages', ' end ')
+    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test1or', ' end ')
 
     # Clean the message chains. Leave only words without capitals, punctuation or numbers.
     # The messages in the chain will no longer be separated.
@@ -74,7 +75,7 @@ def main():
     no_doubles_list = rm_double_messages(messages_dict)
     no_urls_list = url_in_message(no_doubles_list)
     nothing_but_words_list = remove_punctuation(no_urls_list)
-    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/bow_retirement_messages', ' ')
+    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test1bow', ' ')
     
 def is_retirement_in(message):
     retirement_related_words = 'eläke eläkke syytink syyting eläköi'.split()
