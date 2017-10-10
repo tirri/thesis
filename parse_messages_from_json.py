@@ -62,14 +62,14 @@ def main():
     # Store all the original message chains with a retirement-related word in separate files into a directory.
     # The messages in a chain are separated by 'end'.
     messages_as_list = dict_to_list(messages_dict)
-    store_to_dir(messages_as_list, '/Users/tirri/LDA', ' end ')
+    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/test_originals', ' end ')
 
     # Clean the message chains. Leave only words without capitals, punctuation or numbers.
     # The messages in the chain will no longer be separated.
     # Also, no message will appear twice in the data.
     no_doubles_list = rm_double_messages(messages_dict)
     nothing_but_words_list = remove_punctuation(no_doubles_list)
-    store_to_dir(nothing_but_words_list, '/Users/tirri', ' ')
+    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/test_bows', ' ')
     
 def is_retirement_in(message):
     retirement_related_words = 'eläke eläkke syytink syyting eläköi'.split()
@@ -92,10 +92,11 @@ def rm_double_messages(dict):
             # The list where all the messages in the message chain are stored in:
             chain_list = []
 
-            # Whatever the entry message is, put it in the list as string:
-            entry_message = message_chain['entry_message'][0]
-            entry_message = entry_message.lower()
-            chain_list.append(entry_message)
+            # Whatever the entry message is, if it exists, put it in the list as string:
+            if message_chain['entry_message']: ## CHANGE!
+                entry_message = message_chain['entry_message'][0]
+                entry_message = entry_message.lower()
+                chain_list.append(entry_message)
 
             # The comments have three options:
             for comment in message_chain['comments']:
@@ -133,8 +134,8 @@ def dict_to_list(dict):
 
         for message_chain in item:
             chain_list = []
-
-            chain_list.append(message_chain['entry_message'][0])
+            if message_chain['entry_message']:
+                chain_list.append(message_chain['entry_message'][0])
 
             for comment in message_chain['comments']:
                 chain_list.append(comment)
@@ -167,7 +168,6 @@ def store_to_dir( list_to_store, path, in_between_words ):
     i = 1
 
     for message_chain in list_to_store:
-        print('mo')
 
         with open(os.path.join(path, "file%s.txt" % (i)), "w") as file:
 
