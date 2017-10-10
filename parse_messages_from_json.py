@@ -182,5 +182,5 @@ def cleanhtml(raw_html):
     cleantext = re.sub(cleanr, '', raw_html)
     return cleantext
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     main()
