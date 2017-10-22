@@ -1,0 +1,45 @@
+1. Fetch the usage rights
+2. Download the zipped json files
+3. get_retirement_related_conversations.py
+(3.1. big_file_to_small_files.py)
+4. parse_messages_from_json.py
+--> remove stopwords, lemmatize, see gensim OR should I lemmatize first then remove stopwords?
+If so, the stopwords list should also be in the lemmatized form if I use one. Or should I only
+use the most common & the rarest?
+I use stopwords-iso's stopwords-fi from github, version from 29.5.2017. It is a collection of stopwords list from
+multiple sources.
+
+5. What ever comes back from csc-server --> messages_to_bows2 i.e. vectors
+6. lda_of_messages2
+
+nano lemma.slurm # luodaan skripti joka pyörii taidolla
+
+# kirjoitetaan skripti:
+
+#!/bin/bash -l
+#SBATCH -J lemma # nimi
+#SBATCH -o output.txt # jos printtailee tulostuu tänne
+#SBATCH -e errors.txt # errorit tulostuu tänne
+#SBATCH -t 14-00:00:00 # kuinka kauan saa pyöriä max
+#SBATCH -p longrun # tapa jolla ajetaan
+#
+
+module load finnish-process
+module load python-env # tämä tarvitaan
+
+python --version
+python2.7 --version
+python2.7 lemmatize.py bows # python3.x
+
+# lopetetaan nano ctrl+x
+
+sbatch lemma.slurm # käynnistetään skripti
+squeue -u sorsatii # katsellaan whazzup @sorsatii
+
+tried again on 120717. removed all lemmatized files, but output and error might stay the same.
+checked that is running by ls bows/*.lemma | wc -l , result after 2,5 mins is 79. Estimated time of finish:
+3min/100files * 2000 = 6000min/200000files. i.e. 100 hours i.e four to five days. so check before going to
+jazz and on Monday morning should be ready.
+250717: All lemmatized.
+
+
