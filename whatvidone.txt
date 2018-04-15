@@ -11,6 +11,7 @@ multiple sources.
 
 5. What ever comes back from csc-server --> messages_to_bows2 i.e. vectors
 6. lda_of_messages2
+7. find_messages_by_words.py, i.e. find the relevant documents for further analysis
 
 nano lemma.slurm # luodaan skripti joka pyörii taidolla
 
@@ -41,5 +42,6 @@ checked that is running by ls bows/*.lemma | wc -l , result after 2,5 mins is 79
 3min/100files * 2000 = 6000min/200000files. i.e. 100 hours i.e four to five days. so check before going to
 jazz and on Monday morning should be ready.
 250717: All lemmatized.
+
 
 
