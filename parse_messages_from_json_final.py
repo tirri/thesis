@@ -13,7 +13,7 @@ import validators
 
 
 def main():
-    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/test_json_files/' # /S24files_original/ or /test_json_files/ or /test_json_files/temp/
+    path = '/Volumes/Transcend/Documents/GRADU/Tiedostot/S24files_original/' # /S24files_original/ or /test_json_files/ or /test_json_files/temp/
 
     messages_dict = {'data':
         [
@@ -67,7 +67,7 @@ def main():
     # Store all the original message chains with a retirement-related word in separate files into a directory.
     # The messages in a chain are separated by 'end'.
     messages_as_list = dict_to_list(messages_dict)
-    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test1or', ' end ')
+    store_to_dir(messages_as_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/original_retirement_messages', ' end ')
 
     # Clean the message chains. Leave only words without capitals, punctuation or numbers.
     # The messages in the chain will no longer be separated.
@@ -75,7 +75,7 @@ def main():
     no_doubles_list = rm_double_messages(messages_dict)
     no_urls_list = url_in_message(no_doubles_list)
     nothing_but_words_list = remove_punctuation(no_urls_list)
-    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/test1bow', ' ')
+    store_to_dir(nothing_but_words_list, '/Volumes/Transcend/Documents/GRADU/Tiedostot/bow_retirement_messages', ' ')
     
 def is_retirement_in(message):
     retirement_related_words = 'eläke eläkke syytink syyting eläköi'.split()
