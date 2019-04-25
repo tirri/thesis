@@ -1,37 +1,17 @@
-'''
-I have the original documents in a directory, with the same indexing as the Mm-corpus.
-I also have the models for 30, 100 and 200 topics. Now I want to get from the individual topics
-to the documents that have the highest probabilities to belong to the topic.
-
-selected topics to find the documents from:
-ToDo
-
-
-
-151,
-74, 122
-
-—>
-
-Done
-20, 39, 40, 62, 141, 142, 165, 180
-3, 99, 129, 130, 143, 152, 185, 176
-35, 54, 80, 126, 171
-'''
+# Investigate the different model's topics' top documents.
 
 from gensim import corpora, models
 
 def main():
 
-    model_version = 200 # which version of the model are we investigating? 30, 100 or 200 topics?
+    model_version = 200 
 
     #load the respective corpus, gensim-dictionary and lda-model:
     corpus = corpora.MmCorpus('/Users/tirri/LDA/%stopics.mm' % (model_version))
     dictionary = corpora.Dictionary.load('/Users/tirri/LDA/%stopics.dict' % (model_version))
     model = models.LdaModel.load('/Users/tirri/LDA/%stopics.model' % (model_version))
 
-    # path_to_originals = '/Users/tirri/LDA/bows4/'
-    topic_n = 151 # which topic are we investigating?
+    topic_n = 151 # or another integer from 0 to 199
 
     documents_for_topic = get_documents_for_topic(topic_n, model, dictionary, corpus)
     most_probables = get_5_most_probable(documents_for_topic)
