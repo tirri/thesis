@@ -5,11 +5,11 @@
 ## Conduct of analysing the data
 * Fetch the usage rights
 * Download the zipped json files
-* Find all retirement related convesations with parse_messages_from_json_final.py
+* Find all retirement related convesations with parse_messages_from_json.py
 * Transfer the files onto csc-server for lemmatization. Use the lemmatize.py (HIIT digivaalit 2015) and finnish-process -module (Silfverberg et al. 2015) on the retirement discussion files and on the stopwords.
 * Transfer the files back to laptop
-* Modify the conversations for modeling with messages_to_bows2.py
-* Model the data into topics with Latent Dirichlet allocation lda_of_messages.py
+* Modify the conversations for modeling with messages_to_bows.py
+* Model the data into topics with lda_of_messages.py
 * Investigate the most probable documents for the topics with get_top_documents_for_topic.py
 * Investigate more words with show_more_words.py
 * Test coherence with coherence.py
